@@ -1,0 +1,49 @@
+.header {
+    display: flex;
+    background-color: black; 
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerLogo {
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: white;
+    margin-left: 15px;
+}
+
+.headerButton {
+    width: 60px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.headerButton:hover{
+    background-color: black;
+    color: white;
+}
+
+.headerDivMenu {
+    display: flex;
+    flex-direction: row;
+    column-gap: 15px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.headerUl {
+    display: flex;
+    flex-direction: row;
+    column-gap: 15px;
+}
+
+.headerLink {
+    text-decoration: none;
+    color: white;
+}
+
+.headerLink:hover, .headerLogo:hover {
+    text-decoration: underline;
+}

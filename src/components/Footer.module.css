@@ -1,0 +1,14 @@
+.footer {
+    display: flex;
+    background-color: black;
+    height: 60px;
+    
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.footerLink {
+    text-decoration: none;
+    color: white;
+}

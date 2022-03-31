@@ -1,0 +1,11 @@
+.usersList {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+}
+
+.userListBloco {
+    border: 2px black solid;
+    border-radius: 14px;
+    margin: 5px
+}
