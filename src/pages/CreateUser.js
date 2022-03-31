@@ -10,8 +10,17 @@ import { UserContext } from "../context/UserContext";
 
 export default function CreateUser() {
   const location = useLocation();
-  const {isAtualizar } = useContext(UserContext)
+  const {isAtualizar, valuesUser, setValuesUser } = useContext(UserContext)
   const createAlert = () => toast("Usuário cadastrado.");
+  
+  function howSubmit(values) {
+      if(!isAtualizar) {
+        createNewUser(values)
+      } else {
+        atualizarUsuario()
+      }
+  }
+
   //   locationTal = location.pathname.substring()
   async function createNewUser(values) {
     try {
@@ -24,18 +33,23 @@ export default function CreateUser() {
     }
   }
 
+  async function atualizarUsuario() {
+      console.log('olá, cheguei aqui')
+    setValuesUser([])
+  }
+
   return (
     <div className={styles.form}>
       <h1>Sign Up</h1>
       <Formik
         initialValues={{
-          cpf: "",
-          dataNascimento: "",
-          email: "",
-          nome: "",
+          cpf: valuesUser.map(el => el.cpf),
+          dataNascimento: valuesUser.map(el => el.dataNascimento),
+          email: valuesUser.map(el => el.email),
+          nome: valuesUser.map(el => el.nome),
         }}
         onSubmit={async (values) => {
-          createNewUser(values);
+            howSubmit(values)
         }}
       >
         {(props) => (
@@ -56,7 +70,6 @@ export default function CreateUser() {
               id="dataNascimento"
               name="dataNascimento"
               placeholder="Digite sua data de nascimento"
-              values={props.values.dataNascimento}
             />
 
             <label htmlFor="cpf">CPF:</label>
@@ -64,7 +77,7 @@ export default function CreateUser() {
 
             {!isAtualizar && <button type="submit">Cadastrar</button>}
             <ToastContainer />
-            {isAtualizar && <button type="submit">Atualizar</button>}
+            {isAtualizar && <button type="submit" >Atualizar</button>}
           </Form>
         )}
       </Formik>

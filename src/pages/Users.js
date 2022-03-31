@@ -13,7 +13,8 @@ import { UserContext } from "../context/UserContext";
 
 export default function Users() {
   const navigate = useNavigate();
-  const { getUsers, loading, erro, users, setIsAtualizar } = useContext(UserContext)
+  const { getUsers, loading, erro, users, setIsAtualizar, setValuesUser } = useContext(UserContext)
+  
   const getToken = localStorage.getItem('token')
   const deletedAlert = () => toast('Usuário deletado.')
 
@@ -38,8 +39,9 @@ export default function Users() {
     return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
   }
 
-  function navigateAtualizar(id) {
-    navigate(`/create-user/${id}`)
+  function navigateAtualizar(...user) {
+    setValuesUser(user)
+    navigate(`/create-user/${user.idPessoa}`)
     setIsAtualizar(true)
   }
 
@@ -93,7 +95,7 @@ export default function Users() {
             <p>{formatCpf(user.cpf)}</p>
             <p>{moment(user.dataNascimento).format('DD/MM/YYYY')}</p>
             <button onClick={() => deletarUsuario(user.idPessoa)}>Deletar</button>
-            <button onClick={() => navigateAtualizar(user.idPessoa)}>Atualizar</button>
+            <button onClick={() => navigateAtualizar(user)}>Atualizar</button>
             <ToastContainer />
           </div>
         )}
