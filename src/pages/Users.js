@@ -33,15 +33,16 @@ export default function Users() {
       api.defaults.headers.common['Authorization'] = getToken;
       getUsers();
     }
+    //eslint-disable-next-line
   }, [])
 
   function formatCpf(cpf) {
     return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
   }
 
-  function navigateAtualizar(...user) {
+  function navigateAtualizar(id, user) {
     setValuesUser(user)
-    navigate(`/create-user/${user.idPessoa}`)
+    navigate(`/create-user/${id}`)
     setIsAtualizar(true)
   }
 
@@ -95,7 +96,7 @@ export default function Users() {
             <p>{formatCpf(user.cpf)}</p>
             <p>{moment(user.dataNascimento).format('DD/MM/YYYY')}</p>
             <button onClick={() => deletarUsuario(user.idPessoa)}>Deletar</button>
-            <button onClick={() => navigateAtualizar(user)}>Atualizar</button>
+            <button onClick={() => navigateAtualizar(user.idPessoa, user)}>Atualizar</button>
             <ToastContainer />
           </div>
         )}

@@ -10,18 +10,18 @@ import { UserContext } from "../context/UserContext";
 
 export default function CreateUser() {
   const location = useLocation();
-  const {isAtualizar, valuesUser, setValuesUser } = useContext(UserContext)
+  const { isAtualizar, valuesUser, setValuesUser } = useContext(UserContext);
+  const [dadosAtualizadosUsuario, setDadosAtualizadosUsuario] = useState({});
   const createAlert = () => toast("Usuário cadastrado.");
-  
+
   function howSubmit(values) {
-      if(!isAtualizar) {
-        createNewUser(values)
-      } else {
-        atualizarUsuario()
-      }
+    if (!isAtualizar) {
+      createNewUser(values);
+    } else {
+      atualizarUsuario(values);
+    }
   }
 
-  //   locationTal = location.pathname.substring()
   async function createNewUser(values) {
     try {
       const { data } = await api.post("/pessoa", values);
@@ -33,9 +33,24 @@ export default function CreateUser() {
     }
   }
 
-  async function atualizarUsuario() {
-      console.log('olá, cheguei aqui')
-    setValuesUser([])
+  function dadosAtualizados(values) {
+    console.log(values);
+    //   const cpf = values.map(el => el.cpf)
+    //   const dataNascimento = values.map(el => el.dataNascimento)
+    //   const email = values.map(el => el.email)
+    //   const nome = values.map(el => el.nome)
+    setDadosAtualizadosUsuario({cpf: values.cpf, dataNascimento: values.dataNascimento, email: values.email, nome: values.nome});
+    console.log(dadosAtualizadosUsuario);
+  }
+
+  async function atualizarUsuario(values) {
+    const idUsuario = location.pathname.substring(13);
+    try {
+      api.put(`/pessoa/${idUsuario}`, dadosAtualizadosUsuario)
+      setValuesUser([]);
+    } catch (erro) {
+      console.log(erro);
+    }
   }
 
   return (
@@ -43,13 +58,13 @@ export default function CreateUser() {
       <h1>Sign Up</h1>
       <Formik
         initialValues={{
-          cpf: valuesUser.map(el => el.cpf),
-          dataNascimento: valuesUser.map(el => el.dataNascimento),
-          email: valuesUser.map(el => el.email),
-          nome: valuesUser.map(el => el.nome),
+          cpf: valuesUser.cpf,
+          dataNascimento: valuesUser.dataNascimento,
+          email: valuesUser.email,
+          nome: valuesUser.nome,
         }}
         onSubmit={async (values) => {
-            howSubmit(values)
+          howSubmit(values);
         }}
       >
         {(props) => (
@@ -58,12 +73,7 @@ export default function CreateUser() {
             <Field id="nome" name="nome" placeholder="Digite seu nome" />
 
             <label htmlFor="email">Email:</label>
-            <Field
-              id="email"
-              name="email"
-              placeholder="Digite seu email"
-              type="email"
-            />
+            <Field id="email" name="email" placeholder="Digite seu email" />
 
             <label htmlFor="dataNascimento">Data de nascimento:</label>
             <Field
@@ -77,7 +87,14 @@ export default function CreateUser() {
 
             {!isAtualizar && <button type="submit">Cadastrar</button>}
             <ToastContainer />
-            {isAtualizar && <button type="submit" >Atualizar</button>}
+            {isAtualizar && (
+              <button
+                type="submit"
+                onClick={() => dadosAtualizados(props.values)}
+              >
+                Atualizar
+              </button>
+            )}
           </Form>
         )}
       </Formik>

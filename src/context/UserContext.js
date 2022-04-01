@@ -8,7 +8,7 @@ function UserProvider({children}){
     const [loading, setLoading] = useState(true)
     const [erro, setErro] = useState(false)
     const [isAtualizar, setIsAtualizar] = useState(false)
-    const [valuesUser, setValuesUser] = useState([])
+    const [valuesUser, setValuesUser] = useState({})
 
     async function getUsers() {
         try {

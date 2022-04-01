@@ -20,6 +20,7 @@ export default function Home() {
         } else {
             console.log('olá, teste')
         }
+        //eslint-disable-next-line
     },[])
 
     return (
