@@ -1,15 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../context/UserContext";
 import api from "../api/api";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
-import styles from "../components/Users.module.css";
-import { UserContext } from "../context/UserContext";
+import "./Users.css";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -87,9 +87,9 @@ export default function Users() {
     <div>
       <h1>Page User</h1>
       <Link to="/create-user">Cadastrar usuário</Link>
-      <div className={styles.usersList}>
+      <div className='usersList'>
         {users.map((user) => (
-          <div key={user.idPessoa} className={styles.userListBloco}>
+          <div key={user.idPessoa} className='userListBloco'>
             <h3>{user.nome}</h3>
             <p>{user.emal}</p>
             <p>{formatCpf(user.cpf)}</p>

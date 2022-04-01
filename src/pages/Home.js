@@ -1,6 +1,6 @@
 import React, {  useEffect } from 'react'
 import {useNavigate} from 'react-router-dom'
-import styles from '../components/Home.module.css'
+import styles from './Home.css'
 
 export default function Home() {
     const navigate = useNavigate();

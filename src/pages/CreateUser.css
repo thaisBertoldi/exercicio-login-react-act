@@ -1,0 +1,20 @@
+.formUser {
+    border: 1px black solid;
+    margin: 15px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    height: 100vh;
+}
+
+.formListUser {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.formItemUser {
+    justify-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
+}

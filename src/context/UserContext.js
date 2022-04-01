@@ -24,7 +24,7 @@ function UserProvider({children}){
       }
 
     return (
-        <UserContext.Provider value={{getUsers, loading, erro, users, isAtualizar, setIsAtualizar, valuesUser, setValuesUser}}>
+        <UserContext.Provider value={{getUsers, loading, erro, setErro, users, isAtualizar, setIsAtualizar, valuesUser, setValuesUser}}>
         {children}
         </UserContext.Provider>
     )

@@ -1,18 +1,19 @@
 import { Field, Form, Formik } from "formik";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import styles from "../components/Address.module.css";
+import "./CreateUser.css";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
+import api from "../api/api";
 import { UserContext } from "../context/UserContext";
+import Error from "../components/Error";
 
 export default function CreateUser() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAtualizar, setIsAtualizar, valuesUser, setValuesUser } =
+  const { isAtualizar, setIsAtualizar, valuesUser, erro, setErro } =
     useContext(UserContext);
   const [dadosAtualizadosUsuario, setDadosAtualizadosUsuario] = useState({});
   const createAlert = () => toast("Usuário cadastrado.");
@@ -28,8 +29,10 @@ export default function CreateUser() {
 
   async function createNewUser(values) {
     try {
-      values.dataNascimento = moment(values.dataNascimento, "DD/MM/YYYY").format(
-            "YYYY-MM-DD")
+      values.dataNascimento = moment(
+        values.dataNascimento,
+        "DD/MM/YYYY"
+      ).format("YYYY-MM-DD");
       const { data } = await api.post("/pessoa", values);
       if (data) {
         createAlert();
@@ -39,6 +42,7 @@ export default function CreateUser() {
       }
     } catch (error) {
       console.log(error);
+      setErro(true);
     }
   }
 
@@ -56,13 +60,13 @@ export default function CreateUser() {
   async function atualizarUsuario(values) {
     const idUsuario = location.pathname.substring(13);
     try {
-      if (dadosAtualizadosUsuario.cpf.length !== 11 || dadosAtualizadosUsuario.dataNascimento.length !== 10) {
+      if (
+        dadosAtualizadosUsuario.cpf.length !== 11 ||
+        dadosAtualizadosUsuario.dataNascimento.length !== 10
+      ) {
         alert("Não deu, sorry");
       } else {
-        api.put(
-          `/pessoa/${idUsuario}`,
-          dadosAtualizadosUsuario
-        );
+        api.put(`/pessoa/${idUsuario}`, dadosAtualizadosUsuario);
         alert("usuário alterado!");
         setIsAtualizar(false);
         navigate("/users");
@@ -72,8 +76,12 @@ export default function CreateUser() {
     }
   }
 
+  if (erro) {
+    return <Error />;
+  }
+
   return (
-    <div className={styles.form}>
+    <div className='formUser'>
       <h1>Sign Up</h1>
       <Formik
         initialValues={{
@@ -87,33 +95,49 @@ export default function CreateUser() {
         }}
       >
         {(props) => (
-          <Form>
-            <label htmlFor="nome">Nome:</label>
-            <Field id="nome" name="nome" placeholder="Digite seu nome" />
+          <Form className='formListUser'>
+            <div className='formItemUser'>
+              <label htmlFor="nome">Nome:</label>
+              <Field id="nome" name="nome" placeholder="Digite seu nome" />
+            </div>
 
-            <label htmlFor="email">Email:</label>
-            <Field id="email" name="email" placeholder="Digite seu email" type="email"/>
+            <div className='formItemUser'>
+              <label htmlFor="email">Email:</label>
+              <Field
+                id="email"
+                name="email"
+                placeholder="Digite seu email"
+                type="email"
+              />
+            </div>
 
-            <label htmlFor="dataNascimento">Data de nascimento:</label>
-            <Field
-              id="dataNascimento"
-              name="dataNascimento"
-              placeholder="Digite sua data de nascimento"
-            />
+            <div className='formItemUser'>
+              <label htmlFor="dataNascimento">Data de nascimento:</label>
+              <Field
+                id="dataNascimento"
+                name="dataNascimento"
+                placeholder="Digite sua data de nascimento"
+              />
+            </div>
 
-            <label htmlFor="cpf">CPF:</label>
-            <Field id="cpf" name="cpf" placeholder="Digite seu cpf" />
+            <div className='formItemUser'>
+              <label htmlFor="cpf">CPF:</label>
+              <Field id="cpf" name="cpf" placeholder="Digite seu cpf" />
+            </div>
 
-            {!isAtualizar && <button type="submit">Cadastrar</button>}
-            <ToastContainer />
-            {isAtualizar && (
-              <button
-                type="submit"
-                onClick={() => dadosAtualizados(props.values)}
-              >
-                Atualizar
-              </button>
-            )}
+            <div>
+              {!isAtualizar && <button type="submit">Cadastrar</button>}
+              <ToastContainer />
+              {isAtualizar && (
+                <button
+                  type="submit"
+                  onClick={() => dadosAtualizados(props.values)}
+                >
+                  Atualizar
+                </button>
+              )}
+            </div>
+
           </Form>
         )}
       </Formik>

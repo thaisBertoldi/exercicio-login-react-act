@@ -1,6 +1,6 @@
 .form{
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: auto auto;
     align-items: center;
     justify-content: space-evenly;
     border: 1px black solid;
