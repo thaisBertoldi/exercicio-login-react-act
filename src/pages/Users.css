@@ -1,3 +1,7 @@
+.userContainerLoading {
+    height: 100vh;
+}
+
 .usersList {
     display: grid;
     grid-template-columns: auto auto auto;

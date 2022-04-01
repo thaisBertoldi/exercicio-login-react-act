@@ -1,6 +1,6 @@
 import React, {  useEffect } from 'react'
 import {useNavigate} from 'react-router-dom'
-import styles from './Home.css'
+import './Home.css'
 
 export default function Home() {
     const navigate = useNavigate();
@@ -24,6 +24,6 @@ export default function Home() {
     },[])
 
     return (
-        <div className={styles.home}>Home</div>
+        <div className='home'>Home</div>
     )
 }

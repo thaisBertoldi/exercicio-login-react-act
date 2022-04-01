@@ -19,11 +19,6 @@ export default function Users() {
   const getToken = localStorage.getItem("token");
   const deletedAlert = () => toast("Usuário deletado.");
 
-  useEffect(() => {
-    setValuesUser({});
-    //eslint-disable-next-line
-  }, [])
-
   function isLogged() {
     if (!getToken) {
       return false;
@@ -38,6 +33,7 @@ export default function Users() {
     } else {
       api.defaults.headers.common["Authorization"] = getToken;
       getUsers();
+      setIsAtualizar(false)
     }
     //eslint-disable-next-line
   }, []);
@@ -46,10 +42,15 @@ export default function Users() {
     return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
   }
 
-  function navigateAtualizar(id, user) {
-    setValuesUser(user);
-    navigate(`/create-user/${id}`);
-    setIsAtualizar(true);
+  async function navigateAtualizar(id) {
+    try {
+      const { data } = await api.get(`/pessoa/{idPessoa}?idPessoa=${id}`);
+      setValuesUser(data);
+      navigate(`/create-user/${id}`);
+      setIsAtualizar(true);
+    } catch (erro) {
+      console.log(erro);
+    }
   }
 
   function deletarUsuario(id) {
@@ -77,7 +78,11 @@ export default function Users() {
   }
 
   if (loading) {
-    return <Loading />;
+    return (
+      <div className="userContainerLoading">
+        <Loading />;
+      </div>
+    );
   }
   if (erro) {
     return <Error />;
@@ -87,9 +92,9 @@ export default function Users() {
     <div>
       <h1>Page User</h1>
       <Link to="/create-user">Cadastrar usuário</Link>
-      <div className='usersList'>
+      <div className="usersList">
         {users.map((user) => (
-          <div key={user.idPessoa} className='userListBloco'>
+          <div key={user.idPessoa} className="userListBloco">
             <h3>{user.nome}</h3>
             <p>{user.emal}</p>
             <p>{formatCpf(user.cpf)}</p>
@@ -97,7 +102,7 @@ export default function Users() {
             <button onClick={() => deletarUsuario(user.idPessoa)}>
               Deletar
             </button>
-            <button onClick={() => navigateAtualizar(user.idPessoa, user)}>
+            <button onClick={() => navigateAtualizar(user.idPessoa)}>
               Atualizar
             </button>
             <ToastContainer />

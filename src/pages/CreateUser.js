@@ -17,7 +17,8 @@ export default function CreateUser() {
     useContext(UserContext);
   const [dadosAtualizadosUsuario, setDadosAtualizadosUsuario] = useState({});
   const createAlert = () => toast("Usuário cadastrado.");
-  const updateAlert = () => toast("Usuário alterado.");
+
+  console.log(valuesUser.nome);
 
   function howSubmit(values) {
     if (!isAtualizar) {
@@ -81,27 +82,36 @@ export default function CreateUser() {
   }
 
   return (
-    <div className='formUser'>
+    <div className="formUser">
       <h1>Sign Up</h1>
       <Formik
-        initialValues={{
-          cpf: valuesUser.cpf,
-          dataNascimento: valuesUser.dataNascimento,
-          email: valuesUser.email,
-          nome: valuesUser.nome,
-        }}
+        initialValues={
+          isAtualizar
+            ? {
+                cpf: valuesUser.cpf,
+                dataNascimento: valuesUser.dataNascimento,
+                email: valuesUser.email,
+                nome: valuesUser.nome,
+              }
+            : {
+                cpf: "",
+                dataNascimento: "",
+                email: "",
+                nome: "",
+              }
+        }
         onSubmit={async (values) => {
           howSubmit(values);
         }}
       >
         {(props) => (
-          <Form className='formListUser'>
-            <div className='formItemUser'>
+          <Form className="formListUser">
+            <div className="formItemUser">
               <label htmlFor="nome">Nome:</label>
               <Field id="nome" name="nome" placeholder="Digite seu nome" />
             </div>
 
-            <div className='formItemUser'>
+            <div className="formItemUser">
               <label htmlFor="email">Email:</label>
               <Field
                 id="email"
@@ -111,7 +121,7 @@ export default function CreateUser() {
               />
             </div>
 
-            <div className='formItemUser'>
+            <div className="formItemUser">
               <label htmlFor="dataNascimento">Data de nascimento:</label>
               <Field
                 id="dataNascimento"
@@ -120,7 +130,7 @@ export default function CreateUser() {
               />
             </div>
 
-            <div className='formItemUser'>
+            <div className="formItemUser">
               <label htmlFor="cpf">CPF:</label>
               <Field id="cpf" name="cpf" placeholder="Digite seu cpf" />
             </div>
@@ -137,7 +147,6 @@ export default function CreateUser() {
                 </button>
               )}
             </div>
-
           </Form>
         )}
       </Formik>
