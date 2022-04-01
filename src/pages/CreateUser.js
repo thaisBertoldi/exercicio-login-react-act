@@ -28,6 +28,8 @@ export default function CreateUser() {
 
   async function createNewUser(values) {
     try {
+      values.dataNascimento = moment(values.dataNascimento, "DD/MM/YYYY").format(
+            "YYYY-MM-DD")
       const { data } = await api.post("/pessoa", values);
       if (data) {
         createAlert();
@@ -61,7 +63,6 @@ export default function CreateUser() {
           `/pessoa/${idUsuario}`,
           dadosAtualizadosUsuario
         );
-        setValuesUser({});
         alert("usuário alterado!");
         setIsAtualizar(false);
         navigate("/users");
