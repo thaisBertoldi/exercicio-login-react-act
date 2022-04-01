@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import styles from "../components/Address.module.css";
 import { useLocation } from "react-router-dom";
@@ -10,9 +11,12 @@ import { UserContext } from "../context/UserContext";
 
 export default function CreateUser() {
   const location = useLocation();
-  const { isAtualizar, valuesUser, setValuesUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { isAtualizar, setIsAtualizar, valuesUser, setValuesUser } =
+    useContext(UserContext);
   const [dadosAtualizadosUsuario, setDadosAtualizadosUsuario] = useState({});
   const createAlert = () => toast("Usuário cadastrado.");
+  const updateAlert = () => toast("Usuário alterado.");
 
   function howSubmit(values) {
     if (!isAtualizar) {
@@ -27,6 +31,9 @@ export default function CreateUser() {
       const { data } = await api.post("/pessoa", values);
       if (data) {
         createAlert();
+        navigate("/users");
+      } else {
+        alert("Algum valor está errado. Tente novamente");
       }
     } catch (error) {
       console.log(error);
@@ -34,20 +41,31 @@ export default function CreateUser() {
   }
 
   function dadosAtualizados(values) {
-    console.log(values);
-    //   const cpf = values.map(el => el.cpf)
-    //   const dataNascimento = values.map(el => el.dataNascimento)
-    //   const email = values.map(el => el.email)
-    //   const nome = values.map(el => el.nome)
-    setDadosAtualizadosUsuario({cpf: values.cpf, dataNascimento: values.dataNascimento, email: values.email, nome: values.nome});
-    console.log(dadosAtualizadosUsuario);
+    setDadosAtualizadosUsuario({
+      cpf: values.cpf,
+      dataNascimento: moment(values.dataNascimento, "DD/MM/YYYY").format(
+        "YYYY-MM-DD"
+      ),
+      email: values.email,
+      nome: values.nome,
+    });
   }
 
   async function atualizarUsuario(values) {
     const idUsuario = location.pathname.substring(13);
     try {
-      api.put(`/pessoa/${idUsuario}`, dadosAtualizadosUsuario)
-      setValuesUser([]);
+      if (dadosAtualizadosUsuario.cpf.length !== 11 || dadosAtualizadosUsuario.dataNascimento.length !== 10) {
+        alert("Não deu, sorry");
+      } else {
+        api.put(
+          `/pessoa/${idUsuario}`,
+          dadosAtualizadosUsuario
+        );
+        setValuesUser({});
+        alert("usuário alterado!");
+        setIsAtualizar(false);
+        navigate("/users");
+      }
     } catch (erro) {
       console.log(erro);
     }
@@ -73,7 +91,7 @@ export default function CreateUser() {
             <Field id="nome" name="nome" placeholder="Digite seu nome" />
 
             <label htmlFor="email">Email:</label>
-            <Field id="email" name="email" placeholder="Digite seu email" />
+            <Field id="email" name="email" placeholder="Digite seu email" type="email"/>
 
             <label htmlFor="dataNascimento">Data de nascimento:</label>
             <Field
